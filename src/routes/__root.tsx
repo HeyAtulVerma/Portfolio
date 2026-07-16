@@ -13,7 +13,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'Portfolio' },
+      { title: 'Atul Verma - Full Stack Developer', },
       { name: 'description', content: 'Professional portfolio showcasing my projects and skills' },
     ],
     links: [

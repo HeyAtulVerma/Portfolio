@@ -9,7 +9,7 @@ export const Route = createFileRoute('/_public/contact')({
     const profileData = await getProfile()
     return { profile: profileData }
   },
-  head: () => ({ meta: [{ title: 'Contact | Portfolio' }] }),
+  head: () => ({ meta: [{ title: 'Contact - Atul Verma' }] }),
   component: ContactPage,
 })
 
@@ -18,7 +18,7 @@ function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', message: '' })
   const [sent, setSent] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (profile?.email) {
       const mailto = `mailto:${profile.email}?subject=Portfolio Contact from ${form.name}&body=${encodeURIComponent(form.message)}%0A%0AFrom: ${form.name} (${form.email})`

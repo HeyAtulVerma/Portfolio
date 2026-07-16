@@ -6,7 +6,7 @@ import { useMemo } from 'react'
 
 export const Route = createFileRoute('/_public/resume/pdf')({
   loader: async () => await getResumePdfData(),
-  head: () => ({ meta: [{ title: 'Resume PDF | Portfolio' }] }),
+  head: () => ({ meta: [{ title: 'Resume PDF - Atul Verma' }] }),
   component: ResumePdfPage,
 })
 

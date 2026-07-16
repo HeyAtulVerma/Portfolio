@@ -12,7 +12,7 @@ export const Route = createFileRoute('/_public/projects/$slug')({
     }
     return project
   },
-  head: ({ loaderData }) => ({ meta: [{ title: `${loaderData?.title || 'Project'} | Portfolio` }] }),
+  head: ({ loaderData }) => ({ meta: [{ title: `${loaderData?.title || 'Project'} - Atul Verma` }] }),
   component: ProjectDetailPage,
 })
 

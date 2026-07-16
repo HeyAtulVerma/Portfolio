@@ -12,7 +12,7 @@ export const Route = createFileRoute('/_public/resume/')({
     ])
     return { content, profile: profileData }
   },
-  head: () => ({ meta: [{ title: 'Resume | Portfolio' }] }),
+  head: () => ({ meta: [{ title: 'Resume - Atul Verma' }] }),
   component: ResumePage,
 })
 

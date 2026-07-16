@@ -5,7 +5,7 @@ import { AnimatedSection } from '@/components/portfolio/animated-section'
 
 export const Route = createFileRoute('/_public/projects/')({
   loader: async () => await getProjects(),
-  head: () => ({ meta: [{ title: 'Projects | Portfolio' }] }),
+  head: () => ({ meta: [{ title: 'Projects - Atul Verma' }] }),
   component: ProjectsPage,
 })
 

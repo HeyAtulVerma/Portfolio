@@ -26,7 +26,7 @@ function AdminProfile() {
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault()
     setSaving(true)
     await updateProfile({ data: form })

@@ -62,7 +62,7 @@ export function ProjectForm({ project }: ProjectFormProps) {
     }
   }, [results, form.thumbnailUrl])
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault()
     setSaving(true)
 

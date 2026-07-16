@@ -16,7 +16,7 @@ export const Route = createFileRoute('/_public/about')({
     ])
     return { profile: profileData, skills: skillsData, experiences: experiencesData }
   },
-  head: () => ({ meta: [{ title: 'About | Portfolio' }] }),
+  head: () => ({ meta: [{ title: 'About - Atul Verma' }] }),
   component: AboutPage,
 })
 
