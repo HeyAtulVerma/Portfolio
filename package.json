@@ -1,0 +1,48 @@
+{
+  "name": "@rsbuild-example/tanstack-start",
+  "private": true,
+  "type": "module",
+  "imports": {
+    "#/*": "./src/*"
+  },
+  "scripts": {
+    "dev": "rsbuild",
+    "build": "rsbuild build",
+    "preview": "rsbuild preview",
+    "start": "srvx --prod -s ../client dist/server/index.js"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^0.10.4",
+    "@opentelemetry/api": "^1.9.1",
+    "@tanstack/react-devtools": "^0.10.5",
+    "@tanstack/react-router": "^1.170.11",
+    "@tanstack/react-router-devtools": "^1.167.0",
+    "@tanstack/react-start": "^1.168.19",
+    "@tanstack/router-plugin": "^1.168.14",
+    "better-auth": "^1.2.9",
+    "clsx": "^2.1.1",
+    "dotenv": "^17.4.2",
+    "drizzle-orm": "^0.45.2",
+    "lucide-react": "^0.513.0",
+    "motion": "^12.16.0",
+    "pg": "^8.21.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "srvx": "^0.11.16",
+    "tailwind-merge": "^3.3.0",
+    "tailwindcss": "^4.3.0",
+    "zod": "^3.25.49"
+  },
+  "devDependencies": {
+    "@rsbuild/core": "^2.0.5",
+    "@rsbuild/plugin-react": "^2.0.0",
+    "@rsbuild/plugin-tailwindcss": "^2.0.1",
+    "@tailwindcss/typography": "^0.5.19",
+    "@types/node": "^25.6.2",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@types/pg": "^8.20.0",
+    "typescript": "^6.0.3",
+    "drizzle-kit": "^0.31.10"
+  }
+}
