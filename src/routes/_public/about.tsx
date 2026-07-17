@@ -7,8 +7,15 @@ import { ExperienceTimeline } from '@/components/portfolio/experience-timeline'
 import { AnimatedSection } from '@/components/portfolio/animated-section'
 import { MapPin, Mail, Github, Linkedin, Twitter, Globe } from 'lucide-react'
 
+import { getWarmPublicDataCache } from '@/lib/public-data-cache'
+
 export const Route = createFileRoute('/_public/about')({
   loader: async () => {
+    const cached = getWarmPublicDataCache()
+    if (cached) {
+      return { profile: cached.profile, skills: cached.skills, experiences: cached.experiences }
+    }
+
     const [profileData, skillsData, experiencesData] = await Promise.all([
       getProfile(),
       getSkills(),

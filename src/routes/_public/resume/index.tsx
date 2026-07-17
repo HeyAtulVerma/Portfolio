@@ -4,8 +4,15 @@ import { getProfile } from '@/server/functions/profile'
 import { AnimatedSection } from '@/components/portfolio/animated-section'
 import { Download, FileText } from 'lucide-react'
 
+import { getWarmPublicDataCache } from '@/lib/public-data-cache'
+
 export const Route = createFileRoute('/_public/resume/')({
   loader: async () => {
+    const cached = getWarmPublicDataCache()
+    if (cached) {
+      return { content: cached.resumeContent, profile: cached.profile }
+    }
+
     const [content, profileData] = await Promise.all([
       getResumeContent(),
       getProfile(),

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 interface CloudinaryUploadResult {
   secure_url: string
@@ -33,11 +33,8 @@ export function useCloudinaryUpload(
   const widgetRef = useRef(widget)
   widgetRef.current = widget
 
-  // Stabilize options with useMemo to prevent infinite re-renders
-  const allowedFormats = useMemo(
-    () => options?.allowedFormats ?? ['png', 'jpg', 'jpeg', 'webp', 'gif'],
-    [options?.allowedFormats?.join(',')]
-  )
+  // Stabilize options with primitives to prevent infinite re-renders
+  const allowedFormatsStr = (options?.allowedFormats ?? ['png', 'jpg', 'jpeg', 'webp', 'gif']).join(',')
   const maxFiles = options?.maxFiles ?? 10
   const resourceType = options?.resourceType ?? 'image'
 
@@ -73,10 +70,10 @@ export function useCloudinaryUpload(
           maxFiles,
           cropping: false,
           resourceType,
-          clientAllowedFormats: allowedFormats,
+          clientAllowedFormats: allowedFormatsStr.split(','),
           maxFileSize: 10000000, // 10MB
         },
-        (error, result) => {
+        (_error, result) => {
           if (result.event === 'upload-added') {
             setUploading(true)
           }
@@ -97,7 +94,7 @@ export function useCloudinaryUpload(
     return () => {
       cancelled = true
     }
-  }, [folder, allowedFormats, maxFiles, resourceType])
+  }, [folder, allowedFormatsStr, maxFiles, resourceType])
 
   const openWidget = useCallback(() => {
     widget?.open()

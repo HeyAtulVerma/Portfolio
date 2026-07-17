@@ -8,8 +8,15 @@ import { SkillsGrid } from '@/components/portfolio/skills-grid'
 import { AnimatedSection } from '@/components/portfolio/animated-section'
 import { ArrowRight, FileText, Code2, Sparkles } from 'lucide-react'
 
+import { getWarmPublicDataCache } from '@/lib/public-data-cache'
+
 export const Route = createFileRoute('/_public/')({
   loader: async () => {
+    const cached = getWarmPublicDataCache()
+    if (cached) {
+      return { profile: cached.profile, projects: cached.projects, skills: cached.skills }
+    }
+
     const [profileData, projectsData, skillsData] = await Promise.all([
       getProfile(),
       getProjects(),

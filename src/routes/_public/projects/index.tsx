@@ -3,8 +3,16 @@ import { getProjects } from '@/server/functions/projects'
 import { ProjectCard } from '@/components/portfolio/project-card'
 import { AnimatedSection } from '@/components/portfolio/animated-section'
 
+import { getCachedPublicSiteData } from '@/lib/public-data-cache'
+
 export const Route = createFileRoute('/_public/projects/')({
-  loader: async () => await getProjects(),
+  loader: async () => {
+    if (typeof window !== 'undefined') {
+      const cached = await getCachedPublicSiteData()
+      return cached.projects
+    }
+    return await getProjects()
+  },
   head: () => ({ meta: [{ title: 'Projects - Atul Verma' }] }),
   component: ProjectsPage,
 })

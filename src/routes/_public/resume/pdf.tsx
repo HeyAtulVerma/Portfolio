@@ -4,8 +4,16 @@ import { AnimatedSection } from '@/components/portfolio/animated-section'
 import { ArrowLeft, Download, FileText } from 'lucide-react'
 import { useMemo } from 'react'
 
+import { getCachedPublicSiteData } from '@/lib/public-data-cache'
+
 export const Route = createFileRoute('/_public/resume/pdf')({
-  loader: async () => await getResumePdfData(),
+  loader: async () => {
+    if (typeof window !== 'undefined') {
+      const cached = await getCachedPublicSiteData()
+      return cached.resumePdf
+    }
+    return await getResumePdfData()
+  },
   head: () => ({ meta: [{ title: 'Resume PDF - Atul Verma' }] }),
   component: ResumePdfPage,
 })

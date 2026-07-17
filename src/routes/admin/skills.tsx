@@ -1,7 +1,8 @@
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { getSkills, createSkill, updateSkill, deleteSkill } from '@/server/functions/skills'
 import { useState } from 'react'
-import { Plus, Trash2, Save, X } from 'lucide-react'
+import { Plus, Trash2 } from 'lucide-react'
+import { clearPublicDataCache } from '@/lib/public-data-cache'
 
 export const Route = createFileRoute('/admin/skills')({
   loader: async () => await getSkills(),
@@ -16,6 +17,7 @@ function AdminSkills() {
   const handleAdd = async () => {
     if (!newSkill.name.trim() || !newSkill.category.trim()) return
     await createSkill({ data: { name: newSkill.name, category: newSkill.category, proficiency: newSkill.proficiency } })
+    clearPublicDataCache()
     setNewSkill({ name: '', category: '', proficiency: 3 })
     router.invalidate()
   }
@@ -23,11 +25,13 @@ function AdminSkills() {
   const handleDelete = async (id: string) => {
     if (!confirm('Delete this skill?')) return
     await deleteSkill({ data: { id } })
+    clearPublicDataCache()
     router.invalidate()
   }
 
   const handleUpdateProficiency = async (id: string, proficiency: number) => {
     await updateSkill({ data: { id, proficiency } })
+    clearPublicDataCache()
     router.invalidate()
   }
 

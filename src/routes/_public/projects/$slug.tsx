@@ -4,8 +4,18 @@ import { AnimatedSection } from '@/components/portfolio/animated-section'
 import { ArrowLeft, ExternalLink, Github, MonitorPlay, Tag, Wrench } from 'lucide-react'
 import { notFound } from '@tanstack/react-router'
 
+import { getCachedPublicSiteData } from '@/lib/public-data-cache'
+
 export const Route = createFileRoute('/_public/projects/$slug')({
   loader: async ({ params }) => {
+    if (typeof window !== 'undefined') {
+      const cached = await getCachedPublicSiteData()
+      const project = cached.projects.find((p: any) => p.slug === params.slug)
+      if (!project) {
+        throw notFound()
+      }
+      return project
+    }
     const project = await getProjectBySlug({ data: { slug: params.slug } })
     if (!project) {
       throw notFound()
@@ -80,8 +90,8 @@ function ProjectDetailPage() {
               <Wrench size={16} /> Tech Stack
             </div>
             <div className="mt-4 flex flex-wrap gap-2">
-              {project.techStack.map((tech) => (
-                <span key={tech} className="rounded-full bg-primary-50 px-4 py-1.5 text-sm font-medium text-primary-700 dark:bg-primary-950/50 dark:text-primary-300">
+              {project.techStack.map((tech: string) => (
+                <span key={tech} className="rounded-full bg-slate-100 px-4 py-1.5 text-sm font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-200">
                   {tech}
                 </span>
               ))}
@@ -96,7 +106,7 @@ function ProjectDetailPage() {
               <Tag size={16} /> Tags
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
-              {project.tags.map((tag) => (
+              {project.tags.map((tag: string) => (
                 <span key={tag} className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
                   {tag}
                 </span>
@@ -132,7 +142,7 @@ function ProjectDetailPage() {
           <AnimatedSection className="mt-12">
             <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Screenshots</h2>
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              {project.images.map((img) => (
+              {project.images.map((img: any) => (
                 <div key={img.id} className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800">
                   <img src={img.url} alt={img.altText || project.title} className="w-full object-cover transition-transform hover:scale-105" loading="lazy" />
                   {img.caption && (

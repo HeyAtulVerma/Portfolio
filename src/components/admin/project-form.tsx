@@ -4,6 +4,10 @@ import { createProject, updateProject } from '@/server/functions/projects'
 import { slugify } from '@/lib/utils'
 import { useCloudinaryUpload } from '@/hooks/use-cloudinary-upload'
 import { Plus, X, Upload, Save } from 'lucide-react'
+import { clearPublicDataCache } from '@/lib/public-data-cache'
+
+// ... line skip logic handles this, let's use the replacement in handleSubmit:
+
 
 interface ProjectFormProps {
   project?: {
@@ -72,6 +76,7 @@ export function ProjectForm({ project }: ProjectFormProps) {
       } else {
         await createProject({ data: form as any })
       }
+      clearPublicDataCache()
       router.navigate({ to: '/admin/projects' })
     } catch (err) {
       console.error(err)

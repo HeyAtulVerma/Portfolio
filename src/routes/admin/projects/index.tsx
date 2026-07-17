@@ -8,6 +8,8 @@ export const Route = createFileRoute('/admin/projects/')({
   component: AdminProjectsList,
 })
 
+import { clearPublicDataCache } from '@/lib/public-data-cache'
+
 function AdminProjectsList() {
   const projects = Route.useLoaderData()
   const router = useRouter()
@@ -17,6 +19,7 @@ function AdminProjectsList() {
     if (!confirm(`Delete "${title}"? This cannot be undone.`)) return
     setDeleting(id)
     await deleteProject({ data: { id } })
+    clearPublicDataCache()
     router.invalidate()
     setDeleting(null)
   }
@@ -69,7 +72,8 @@ function AdminProjectsList() {
               </div>
               <div className="flex items-center gap-2">
                 <Link
-                  to={`/admin/projects/${project.id}`}
+                  to="/admin/projects/$id"
+                  params={{ id: project.id }}
                   className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800"
                 >
                   <Edit size={18} />

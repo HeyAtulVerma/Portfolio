@@ -8,6 +8,8 @@ export const Route = createFileRoute('/admin/profile')({
   component: AdminProfile,
 })
 
+import { clearPublicDataCache } from '@/lib/public-data-cache'
+
 function AdminProfile() {
   const profile = Route.useLoaderData()
   const router = useRouter()
@@ -30,6 +32,7 @@ function AdminProfile() {
     e.preventDefault()
     setSaving(true)
     await updateProfile({ data: form })
+    clearPublicDataCache()
     setSaving(false)
     setSaved(true)
     router.invalidate()

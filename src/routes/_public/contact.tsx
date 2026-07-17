@@ -4,8 +4,15 @@ import { getProfile } from '@/server/functions/profile'
 import { Mail, MapPin, Send } from 'lucide-react'
 import { useState } from 'react'
 
+import { getWarmPublicDataCache } from '@/lib/public-data-cache'
+
 export const Route = createFileRoute('/_public/contact')({
   loader: async () => {
+    const cached = getWarmPublicDataCache()
+    if (cached) {
+      return { profile: cached.profile }
+    }
+
     const profileData = await getProfile()
     return { profile: profileData }
   },

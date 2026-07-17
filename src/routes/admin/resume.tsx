@@ -1,8 +1,9 @@
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { getResumeContent, updateResumeSection, deleteResumeSection, getResumeUrl, updateResumeUrl } from '@/server/functions/resume'
+import { getResumeContent, updateResumeSection, deleteResumeSection, getResumeUrl, updateResumeUrl, deleteResumePdf } from '@/server/functions/resume'
 import { useState, useEffect, useRef } from 'react'
 import { useCloudinaryUpload } from '@/hooks/use-cloudinary-upload'
-import { Plus, Trash2, Upload, Save, FileText, X } from 'lucide-react'
+import { Plus, Trash2, Upload, Save, FileText } from 'lucide-react'
+import { clearPublicDataCache } from '@/lib/public-data-cache'
 
 export const Route = createFileRoute('/admin/resume')({
   loader: async () => {
@@ -15,13 +16,27 @@ export const Route = createFileRoute('/admin/resume')({
 function AdminResume() {
   const { content, resumeUrl } = Route.useLoaderData()
   const router = useRouter()
-  const [sections, setSections] = useState(content)
   const [newSection, setNewSection] = useState({ title: '', content: '' })
+  const [deletingPdf, setDeletingPdf] = useState(false)
   const { openWidget, results, uploading } = useCloudinaryUpload('portfolio/resume', {
     allowedFormats: ['pdf'],
     maxFiles: 1,
     resourceType: 'raw',
   })
+
+  const handleDeletePdf = async () => {
+    if (!confirm('Are you sure you want to remove the current resume PDF?')) return
+    try {
+      setDeletingPdf(true)
+      await deleteResumePdf()
+      clearPublicDataCache()
+      router.invalidate()
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setDeletingPdf(false)
+    }
+  }
 
   // Handle resume PDF upload via effect (not during render)
   const processedResults = useRef(new Set<string>())
@@ -31,6 +46,7 @@ function AdminResume() {
       if (!processedResults.current.has(lastUpload.public_id)) {
         processedResults.current.add(lastUpload.public_id)
         updateResumeUrl({ data: { resumeUrl: lastUpload.secure_url, resumePublicId: lastUpload.public_id } }).then(() => {
+          clearPublicDataCache()
           router.invalidate()
         })
       }
@@ -40,20 +56,23 @@ function AdminResume() {
   const handleAddSection = async () => {
     if (!newSection.title.trim()) return
     await updateResumeSection({
-      data: { sectionTitle: newSection.title, content: newSection.content, sortOrder: sections.length },
+      data: { sectionTitle: newSection.title, content: newSection.content, sortOrder: content.length },
     })
+    clearPublicDataCache()
     setNewSection({ title: '', content: '' })
     router.invalidate()
   }
 
   const handleUpdateSection = async (id: string, title: string, sectionContent: string) => {
     await updateResumeSection({ data: { id, sectionTitle: title, content: sectionContent } })
+    clearPublicDataCache()
     router.invalidate()
   }
 
   const handleDeleteSection = async (id: string) => {
     if (!confirm('Delete this section?')) return
     await deleteResumeSection({ data: { id } })
+    clearPublicDataCache()
     router.invalidate()
   }
 
@@ -65,19 +84,30 @@ function AdminResume() {
       {/* PDF Upload */}
       <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-8 dark:border-slate-800 dark:bg-slate-900">
         <h2 className="text-lg font-bold text-slate-900 dark:text-white">Resume PDF</h2>
-        <div className="mt-4 flex items-center gap-4">
-          {resumeUrl && (
+        <div className="mt-4 flex flex-wrap items-center gap-4">
+          {resumeUrl?.resumeUrl && (
             <a href="/resume/pdf" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400">
               <FileText size={16} /> View current PDF
             </a>
           )}
-          <button
-            onClick={openWidget}
-            disabled={uploading}
-            className="inline-flex items-center gap-2 rounded-xl bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-primary-700 disabled:opacity-50"
-          >
-            <Upload size={16} /> {uploading ? 'Uploading...' : resumeUrl ? 'Replace PDF' : 'Upload PDF'}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={openWidget}
+              disabled={uploading}
+              className="inline-flex items-center gap-2 rounded-xl bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-primary-700 disabled:opacity-50"
+            >
+              <Upload size={16} /> {uploading ? 'Uploading...' : resumeUrl?.resumeUrl ? 'Replace PDF' : 'Upload PDF'}
+            </button>
+            {resumeUrl?.resumeUrl && (
+              <button
+                onClick={handleDeletePdf}
+                disabled={uploading || deletingPdf}
+                className="inline-flex items-center gap-2 rounded-xl border border-red-200 bg-white px-5 py-2.5 text-sm font-semibold text-red-600 transition-all hover:bg-red-50 dark:border-red-950/40 dark:bg-slate-900 dark:text-red-400 dark:hover:bg-red-950/20 disabled:opacity-50"
+              >
+                <Trash2 size={16} /> Remove PDF
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -87,7 +117,7 @@ function AdminResume() {
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">These appear on the formatted resume page</p>
 
         <div className="mt-6 space-y-4">
-          {sections.map((section) => (
+          {content.map((section) => (
             <SectionEditor
               key={section.id}
               section={section}

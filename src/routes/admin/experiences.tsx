@@ -1,7 +1,8 @@
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { getExperiences, createExperience, updateExperience, deleteExperience } from '@/server/functions/experiences'
+import { getExperiences, createExperience, deleteExperience } from '@/server/functions/experiences'
 import { useState } from 'react'
 import { Plus, Trash2, Save } from 'lucide-react'
+import { clearPublicDataCache } from '@/lib/public-data-cache'
 
 export const Route = createFileRoute('/admin/experiences')({
   loader: async () => await getExperiences(),
@@ -26,6 +27,7 @@ function AdminExperiences() {
         isCurrentRole: newExp.isCurrentRole,
       },
     })
+    clearPublicDataCache()
     setNewExp({ role: '', company: '', description: '', startDate: '', endDate: '', isCurrentRole: false })
     setShowForm(false)
     router.invalidate()
@@ -34,6 +36,7 @@ function AdminExperiences() {
   const handleDelete = async (id: string) => {
     if (!confirm('Delete this experience?')) return
     await deleteExperience({ data: { id } })
+    clearPublicDataCache()
     router.invalidate()
   }
 

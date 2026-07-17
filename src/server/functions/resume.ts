@@ -52,54 +52,22 @@ export const getResumePdfData = createServerFn({ method: 'GET' }).handler(async 
   try {
     const result = await db.select({
       resumeUrl: profile.resumeUrl,
-      resumePublicId: profile.resumePublicId,
     }).from(profile).limit(1)
 
     const row = result[0]
-    if (!row?.resumePublicId) return null
+    if (!row?.resumeUrl) return null
 
-    const cloudName = getEnv('CLOUDINARY_CLOUD_NAME')
     const apiKey = getEnv('CLOUDINARY_API_KEY')
     const apiSecret = getEnv('CLOUDINARY_API_SECRET')
     const credentials = btoa(`${apiKey}:${apiSecret}`)
-    const authHeader = `Basic ${credentials}`
 
-    // First ensure access_mode is public (in case it wasn't set during upload)
-    const resourceUrl = `https://api.cloudinary.com/v1_1/${cloudName}/resources/raw/upload/${encodeURIComponent(row.resumePublicId)}`
-    await fetch(resourceUrl, {
-      method: 'POST',
-      headers: { 'Authorization': authHeader, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ access_mode: 'public' }),
+    // Fetch the actual PDF file directly using the public resumeUrl with credentials
+    const pdfRes = await fetch(row.resumeUrl, {
+      headers: { 'Authorization': `Basic ${credentials}` },
     })
-
-    // Get resource details to retrieve secure_url
-    const getRes = await fetch(resourceUrl, {
-      headers: { 'Authorization': authHeader },
-    })
-    if (!getRes.ok) {
-      console.error('Cloudinary admin GET failed:', getRes.status, await getRes.text())
-      return null
-    }
-    const data = await getRes.json() as { secure_url?: string }
-    if (!data.secure_url) {
-      console.error('No secure_url in Cloudinary response:', data)
-      return null
-    }
-
-    // Fetch the actual PDF file
-    const pdfRes = await fetch(data.secure_url)
     if (!pdfRes.ok) {
-      console.error('Failed to fetch PDF from secure_url:', pdfRes.status)
-      // Try with auth header as fallback
-      const pdfRes2 = await fetch(data.secure_url, {
-        headers: { 'Authorization': authHeader },
-      })
-      if (!pdfRes2.ok) {
-        console.error('Also failed with auth:', pdfRes2.status)
-        return null
-      }
-      const buffer = await pdfRes2.arrayBuffer()
-      return btoa(String.fromCharCode(...new Uint8Array(buffer)))
+      console.error('Failed to fetch PDF directly from resumeUrl:', pdfRes.status)
+      return null
     }
     const buffer = await pdfRes.arrayBuffer()
     // Convert to base64 in chunks to avoid call stack overflow
@@ -150,3 +118,35 @@ export const updateResumeUrl = createServerFn({ method: 'POST' })
       .returning()
     return updated
   })
+
+export const deleteResumePdf = createServerFn({ method: 'POST' }).handler(async () => {
+  await requireAdmin()
+  const existing = await db.select().from(profile).limit(1)
+  if (existing.length === 0) return null
+
+  const row = existing[0]
+  if (row.resumePublicId) {
+    const cloudName = getEnv('CLOUDINARY_CLOUD_NAME')
+    const apiKey = getEnv('CLOUDINARY_API_KEY')
+    const apiSecret = getEnv('CLOUDINARY_API_SECRET')
+    const credentials = btoa(`${apiKey}:${apiSecret}`)
+    
+    try {
+      const deleteUrl = `https://api.cloudinary.com/v1_1/${cloudName}/resources/raw/upload?public_ids[]=${encodeURIComponent(row.resumePublicId)}`
+      await fetch(deleteUrl, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Basic ${credentials}` },
+      })
+    } catch (e) {
+      console.error('Failed to delete resume PDF from Cloudinary:', e)
+    }
+  }
+
+  const [updated] = await db
+    .update(profile)
+    .set({ resumeUrl: null, resumePublicId: null, updatedAt: new Date() })
+    .where(eq(profile.id, row.id))
+    .returning()
+  return updated
+})
+

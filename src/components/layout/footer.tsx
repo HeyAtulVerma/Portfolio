@@ -1,7 +1,16 @@
 import { Github, Linkedin, Twitter, Mail } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 
-export function Footer() {
+interface FooterProps {
+  profile?: {
+    githubUrl?: string | null
+    linkedinUrl?: string | null
+    twitterUrl?: string | null
+    email?: string | null
+  } | null
+}
+
+export function Footer({ profile }: FooterProps) {
   return (
     <footer className="border-t border-slate-200/50 bg-white dark:border-slate-800/50 dark:bg-slate-950">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -36,18 +45,26 @@ export function Footer() {
           <div>
             <h4 className="text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-slate-100">Connect</h4>
             <div className="mt-3 flex gap-3">
-              <a href="#" className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800">
-                <Github size={20} />
-              </a>
-              <a href="#" className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800">
-                <Linkedin size={20} />
-              </a>
-              <a href="#" className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800">
-                <Twitter size={20} />
-              </a>
-              <a href="#" className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800">
-                <Mail size={20} />
-              </a>
+              {profile?.githubUrl && (
+                <a href={profile.githubUrl} target="_blank" rel="noopener noreferrer" className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800">
+                  <Github size={20} />
+                </a>
+              )}
+              {profile?.linkedinUrl && (
+                <a href={profile.linkedinUrl} target="_blank" rel="noopener noreferrer" className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800">
+                  <Linkedin size={20} />
+                </a>
+              )}
+              {profile?.twitterUrl && (
+                <a href={profile.twitterUrl} target="_blank" rel="noopener noreferrer" className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800">
+                  <Twitter size={20} />
+                </a>
+              )}
+              {profile?.email && (
+                <a href={`mailto:${profile.email}`} className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800">
+                  <Mail size={20} />
+                </a>
+              )}
             </div>
           </div>
 
