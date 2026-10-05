@@ -9,7 +9,10 @@
     "dev": "rsbuild --port 3001",
     "build": "rsbuild build && (cp -r dist/server/static dist/client/ 2>/dev/null || true)",
     "preview": "rsbuild preview --port 3001",
-    "start": "srvx --prod -p 3001 -s ../client dist/server/index.js"
+    "start": "srvx --prod -p 3001 -s ../client dist/server/index.js",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4",
@@ -24,6 +27,7 @@
     "clsx": "^2.1.1",
     "dotenv": "^17.4.2",
     "drizzle-orm": "^0.45.2",
+    "gsap": "^3.15.0",
     "lucide-react": "^0.513.0",
     "motion": "^12.16.0",
     "pg": "^8.21.0",

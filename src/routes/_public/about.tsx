@@ -1,125 +1,133 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { getProfile } from '@/server/functions/profile'
 import { getSkills } from '@/server/functions/skills'
-import { getExperiences } from '@/server/functions/experiences'
 import { SkillsGrid } from '@/components/portfolio/skills-grid'
-import { ExperienceTimeline } from '@/components/portfolio/experience-timeline'
 import { AnimatedSection } from '@/components/portfolio/animated-section'
-import { MapPin, Mail, Github, Linkedin, Twitter, Globe } from 'lucide-react'
-
+import { MapPin, Mail, Github, Linkedin } from 'lucide-react'
 import { getWarmPublicDataCache } from '@/lib/public-data-cache'
 
 export const Route = createFileRoute('/_public/about')({
   loader: async () => {
     const cached = getWarmPublicDataCache()
     if (cached) {
-      return { profile: cached.profile, skills: cached.skills, experiences: cached.experiences }
+      return { profile: cached.profile, skills: cached.skills }
     }
-
-    const [profileData, skillsData, experiencesData] = await Promise.all([
+    const [profileData, skillsData] = await Promise.all([
       getProfile(),
       getSkills(),
-      getExperiences(),
     ])
-    return { profile: profileData, skills: skillsData, experiences: experiencesData }
+    return { profile: profileData, skills: skillsData }
   },
   head: () => ({ meta: [{ title: 'About - Atul Verma' }] }),
   component: AboutPage,
 })
 
 function AboutPage() {
-  const { profile, skills, experiences } = Route.useLoaderData()
+  const { profile, skills } = Route.useLoaderData()
 
   return (
-    <div className="py-20 md:py-28 bg-dot-pattern min-h-screen">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div className="py-16 md:py-24 bg-dot-pattern min-h-screen">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6">
         {/* Header */}
         <AnimatedSection>
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary-500/20 bg-primary-50/50 px-3.5 py-1 text-xs font-semibold text-primary-600 dark:border-primary-500/30 dark:bg-primary-950/40 dark:text-primary-400 mb-4">
-            Developer Journey
-          </div>
-          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
-            About Me
+          <span className="section-tag">About</span>
+          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-[#141714] dark:text-[#ecf0ea]">
+            A bit about me.
           </h1>
-          <p className="mt-3 text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl">
-            Background, engineering approach, and the story behind my work.
-          </p>
         </AnimatedSection>
 
-        {/* Bio Section */}
-        <div className="mt-14 grid gap-8 lg:grid-cols-3">
-          <AnimatedSection className="lg:col-span-2">
-            <div className="glass-card rounded-2xl p-7 sm:p-8">
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white pb-3 border-b border-slate-100 dark:border-slate-800">
-                My Story & Background
+        {/* Story & Profile */}
+        <div className="mt-10 grid gap-8 md:grid-cols-12 items-start">
+          {/* Main Story */}
+          <AnimatedSection className="md:col-span-8">
+            <div className="glass-card rounded-2xl p-6 sm:p-8">
+              <h2 className="text-base font-bold text-[#141714] dark:text-[#ecf0ea] mb-4">
+                Background &amp; Philosophy
               </h2>
-              <div className="mt-5 space-y-4 text-slate-600 dark:text-slate-300 leading-relaxed">
+              <div className="space-y-4 text-sm text-slate-600 dark:text-white/70 leading-relaxed">
                 {profile?.longBio ? (
-                  profile.longBio.split('\n').map((p, i) => (
+                  profile.longBio.split('\n').filter(Boolean).map((p: string, i: number) => (
                     <p key={i}>{p}</p>
                   ))
                 ) : (
-                  <p>A passionate developer dedicated to creating amazing digital experiences. Check back soon for more about my journey!</p>
+                  <>
+                    <p>
+                      I am a full-stack developer dedicated to building responsive, accessible, and high-performance digital products.
+                    </p>
+                    <p>
+                      My core focus is modern TypeScript, React, and robust backend services. I enjoy exploring systems tools and shipping clean, well-tested code.
+                    </p>
+                  </>
                 )}
               </div>
             </div>
           </AnimatedSection>
 
-          <AnimatedSection delay={0.2}>
-            <div className="glass-card rounded-2xl p-7 sm:p-8">
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white pb-3 border-b border-slate-100 dark:border-slate-800">
-                Quick Facts
-              </h2>
-              <div className="mt-4 space-y-4">
-                {profile?.fullName && (
-                  <div className="flex items-center gap-3 text-slate-600 dark:text-slate-300">
-                    <span className="font-medium">{profile.fullName}</span>
-                  </div>
-                )}
+          {/* Quick Info Card */}
+          <AnimatedSection delay={0.1} className="md:col-span-4">
+            <div className="glass-card rounded-2xl p-6">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-white/40 mb-4">
+                Quick Info
+              </h3>
+              <div className="space-y-3 text-xs">
+                <div className="flex items-center gap-2.5 text-slate-700 dark:text-white/80">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary-500" />
+                  <span>{profile?.role || 'Full-Stack Developer'}</span>
+                </div>
                 {profile?.location && (
-                  <div className="flex items-center gap-3 text-slate-600 dark:text-slate-300">
-                    <MapPin size={18} className="text-primary-500" />
+                  <div className="flex items-center gap-2.5 text-slate-700 dark:text-white/80">
+                    <MapPin size={13} className="text-slate-400" />
                     <span>{profile.location}</span>
                   </div>
                 )}
                 {profile?.email && (
-                  <div className="flex items-center gap-3 text-slate-600 dark:text-slate-300">
-                    <Mail size={18} className="text-primary-500" />
-                    <a href={`mailto:${profile.email}`} className="hover:text-primary-600">{profile.email}</a>
+                  <div className="flex items-center gap-2.5 text-slate-700 dark:text-white/80">
+                    <Mail size={13} className="text-slate-400" />
+                    <a href={`mailto:${profile.email}`} className="hover:text-primary-500 transition-colors">
+                      {profile.email}
+                    </a>
                   </div>
                 )}
-                <div className="flex gap-3 pt-2">
-                  {profile?.githubUrl && <a href={profile.githubUrl} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"><Github size={20} /></a>}
-                  {profile?.linkedinUrl && <a href={profile.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"><Linkedin size={20} /></a>}
-                  {profile?.twitterUrl && <a href={profile.twitterUrl} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"><Twitter size={20} /></a>}
-                  {profile?.websiteUrl && <a href={profile.websiteUrl} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"><Globe size={20} /></a>}
-                </div>
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-black/[0.06] dark:border-white/[0.06] flex gap-2">
+                {profile?.githubUrl && (
+                  <a
+                    href={profile.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/[0.06] bg-black/[0.02] text-slate-600 hover:text-slate-900 dark:border-white/[0.06] dark:bg-white/[0.03] dark:text-white/70 dark:hover:text-white transition-colors"
+                  >
+                    <Github size={14} />
+                  </a>
+                )}
+                {profile?.linkedinUrl && (
+                  <a
+                    href={profile.linkedinUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/[0.06] bg-black/[0.02] text-slate-600 hover:text-slate-900 dark:border-white/[0.06] dark:bg-white/[0.03] dark:text-white/70 dark:hover:text-white transition-colors"
+                  >
+                    <Linkedin size={14} />
+                  </a>
+                )}
               </div>
             </div>
           </AnimatedSection>
         </div>
 
-        {/* Skills */}
+        {/* Skills Section */}
         {skills.length > 0 && (
-          <div className="mt-24">
+          <div className="mt-16">
             <AnimatedSection>
-              <h2 className="text-3xl font-bold text-slate-900 dark:text-white">Skills</h2>
+              <div className="mb-8">
+                <span className="section-tag">Toolkit</span>
+                <h2 className="text-2xl font-bold tracking-tight text-[#141714] dark:text-[#ecf0ea]">
+                  Technologies &amp; Tools
+                </h2>
+              </div>
             </AnimatedSection>
-            <div className="mt-8">
-              <SkillsGrid skills={skills} />
-            </div>
-          </div>
-        )}
-
-        {/* Experience */}
-        {experiences.length > 0 && (
-          <div className="mt-24">
-            <AnimatedSection>
-              <h2 className="text-3xl font-bold text-slate-900 dark:text-white">Experience</h2>
-            </AnimatedSection>
-            <div className="mt-8">
-              <ExperienceTimeline experiences={experiences} />
-            </div>
+            <SkillsGrid skills={skills} />
           </div>
         )}
       </div>

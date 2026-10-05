@@ -4,7 +4,7 @@ import { ProjectCard } from '@/components/portfolio/project-card'
 import { AnimatedSection } from '@/components/portfolio/animated-section'
 import { getCachedPublicSiteData } from '@/lib/public-data-cache'
 import { useState, useMemo } from 'react'
-import { Code2, Search, X } from 'lucide-react'
+import { Search, X } from 'lucide-react'
 
 export const Route = createFileRoute('/_public/projects/')({
   loader: async () => {
@@ -18,12 +18,11 @@ export const Route = createFileRoute('/_public/projects/')({
   component: ProjectsPage,
 })
 
-export function ProjectsPage() {
+function ProjectsPage() {
   const projects = Route.useLoaderData()
   const [search, setSearch] = useState('')
   const [activeTag, setActiveTag] = useState('All')
 
-  // Collect all unique tags and tech across projects
   const tags = useMemo(() => {
     const set = new Set<string>()
     projects.forEach((p: any) => {
@@ -51,54 +50,47 @@ export function ProjectsPage() {
   }, [projects, activeTag, search])
 
   return (
-    <div className="py-20 md:py-28 bg-dot-pattern min-h-screen">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div className="py-16 md:py-24 bg-dot-pattern min-h-screen">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <AnimatedSection>
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary-500/20 bg-primary-50/50 px-3.5 py-1 text-xs font-semibold text-primary-600 dark:border-primary-500/30 dark:bg-primary-950/40 dark:text-primary-400 mb-4">
-            <Code2 size={14} /> Production Portfolio
-          </div>
-          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
-            Projects & Case Studies
+          <span className="section-tag">Portfolio</span>
+          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-[#141714] dark:text-[#ecf0ea]">
+            Selected Works
           </h1>
-          <p className="mt-3 text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl">
-            A curated showcase of full-stack web platforms, native systems tools, PWAs, and games.
-          </p>
         </AnimatedSection>
 
         {/* Search & Filters */}
-        <AnimatedSection delay={0.1} className="mt-10">
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-            {/* Search Box */}
-            <div className="relative flex-1 max-w-md">
-              <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+        <AnimatedSection delay={0.08} className="mt-8">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+            <div className="relative flex-1 max-w-sm">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search projects by name or technology..."
-                className="w-full rounded-xl border border-slate-200/80 bg-white/80 py-2.5 pl-10 pr-4 text-sm text-slate-900 shadow-sm outline-none transition-all placeholder:text-slate-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 dark:border-slate-800 dark:bg-slate-900/80 dark:text-white"
+                placeholder="Search projects..."
+                className="w-full rounded-xl border border-black/[0.08] bg-white/70 py-2 pl-9 pr-3 text-xs text-[#141714] outline-none transition-all placeholder:text-slate-400 focus:border-primary-500 dark:border-white/[0.08] dark:bg-white/[0.03] dark:text-[#ecf0ea] dark:placeholder:text-white/30"
               />
               {search && (
                 <button
                   onClick={() => setSearch('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-white"
                 >
-                  <X size={14} />
+                  <X size={12} />
                 </button>
               )}
             </div>
 
-            {/* Tag Pills */}
             {tags.length > 2 && (
               <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
                 {tags.map((tag) => (
                   <button
                     key={tag}
                     onClick={() => setActiveTag(tag)}
-                    className={`rounded-xl px-3.5 py-2 text-xs font-semibold whitespace-nowrap transition-all ${
+                    className={`rounded-lg px-3 py-1.5 text-xs font-medium whitespace-nowrap transition-colors ${
                       activeTag === tag
-                        ? 'bg-primary-600 text-white shadow-sm'
-                        : 'border border-slate-200/80 bg-white/70 text-slate-600 hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-300 dark:hover:bg-slate-800'
+                        ? 'bg-primary-500 text-[#090b09] font-bold'
+                        : 'border border-black/[0.06] bg-white/60 text-slate-600 hover:bg-slate-100 dark:border-white/[0.06] dark:bg-white/[0.03] dark:text-white/70 dark:hover:bg-white/[0.08]'
                     }`}
                   >
                     {tag}
@@ -110,17 +102,11 @@ export function ProjectsPage() {
         </AnimatedSection>
 
         {/* Projects Grid */}
-        <div className="mt-10">
+        <div className="mt-8">
           {filtered.length === 0 ? (
-            <AnimatedSection>
-              <div className="rounded-2xl border border-dashed border-slate-300 dark:border-slate-800 p-16 text-center">
-                <Code2 className="mx-auto text-slate-400 dark:text-slate-600" size={48} />
-                <h3 className="mt-4 text-lg font-bold text-slate-900 dark:text-white">No projects found</h3>
-                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                  Try adjusting your search criteria or tag filters.
-                </p>
-              </div>
-            </AnimatedSection>
+            <div className="rounded-2xl border border-dashed border-black/[0.08] dark:border-white/[0.08] p-12 text-center text-xs text-slate-500 dark:text-white/40">
+              No projects match your filter.
+            </div>
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {filtered.map((project: any, idx: number) => (
