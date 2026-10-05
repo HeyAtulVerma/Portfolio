@@ -30,12 +30,27 @@
   html {
     scroll-behavior: smooth;
     letter-spacing: -0.011em;
+    user-select: none;
+    -webkit-user-select: none;
   }
 
   body {
     @apply bg-[#fafbfa] text-[#141714] dark:bg-[#090b09] dark:text-[#ecf0ea] antialiased;
     @apply selection:bg-primary-500/20 selection:text-primary-700 dark:selection:text-primary-300;
     transition: background-color 0.3s ease, color 0.3s ease;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* Allow text selection inside editable inputs, textareas, code blocks, and explicitly marked elements */
+  input,
+  textarea,
+  [contenteditable="true"],
+  pre,
+  code,
+  .selectable-text {
+    user-select: text;
+    -webkit-user-select: text;
   }
 
   ::-webkit-scrollbar { width: 5px; height: 5px; }
@@ -105,15 +120,18 @@
 }
 
 /* ─── Minimal Action Buttons ───────────────────────────── */
-.btn-primary {
+.btn-primary,
+.btn-green {
   @apply inline-flex items-center justify-center gap-2 rounded-xl bg-primary-500 px-5 py-2.5 text-xs font-bold text-[#090b09] shadow-sm shadow-primary-500/20 transition-all hover:bg-primary-400 hover:shadow hover:shadow-primary-500/30 active:scale-[0.98];
 }
 
-.btn-secondary {
+.btn-secondary,
+.btn-outline {
   @apply inline-flex items-center justify-center gap-2 rounded-xl border border-black/[0.08] bg-white/60 px-5 py-2.5 text-xs font-semibold text-[#141714] shadow-sm transition-all hover:bg-black/[0.03] hover:border-black/[0.15] dark:border-white/[0.08] dark:bg-white/[0.03] dark:text-[#ecf0ea] dark:hover:bg-white/[0.07] dark:hover:border-white/[0.15] active:scale-[0.98];
 }
 
 /* ─── Section Header ───────────────────────────────────── */
-.section-tag {
+.section-tag,
+.section-label {
   @apply inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-primary-600 dark:text-primary-400 mb-2;
 }

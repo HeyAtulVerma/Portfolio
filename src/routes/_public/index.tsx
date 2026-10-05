@@ -7,8 +7,10 @@ import { HeroSection } from '@/components/portfolio/hero-section'
 import { ProjectCard } from '@/components/portfolio/project-card'
 import { SkillsGrid } from '@/components/portfolio/skills-grid'
 import { AnimatedSection } from '@/components/portfolio/animated-section'
+import { ContactSection } from '@/components/portfolio/contact-section'
 import { ArrowRight, CheckCircle2, ExternalLink } from 'lucide-react'
 import { getWarmPublicDataCache } from '@/lib/public-data-cache'
+import { usePinnedPanels } from '@/hooks/use-pinned-panels'
 
 export const Route = createFileRoute('/_public/')({
   loader: async () => {
@@ -34,9 +36,10 @@ export const Route = createFileRoute('/_public/')({
 
 function HomePage() {
   const { profile, projects, skills, certifications } = Route.useLoaderData()
+  const containerRef = usePinnedPanels()
 
   return (
-    <>
+    <div ref={containerRef} className="relative">
       <HeroSection
         name={profile?.fullName || 'Atul Verma'}
         role={profile?.role || 'Full-Stack Developer'}
@@ -48,7 +51,7 @@ function HomePage() {
 
       {/* Featured Projects */}
       {projects.length > 0 && (
-        <section className="py-16 md:py-24 border-t border-black/[0.06] dark:border-white/[0.06]">
+        <section className="pinned-panel relative py-16 md:py-24 rounded-t-[32px] sm:rounded-t-[44px] bg-[#fafbfa] dark:bg-[#090b09] border-t border-black/[0.08] dark:border-white/[0.08] shadow-[0_-20px_50px_rgba(0,0,0,0.35)] dark:shadow-[0_-25px_60px_rgba(0,0,0,0.85)]">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <AnimatedSection>
               <div className="flex items-end justify-between mb-10">
@@ -95,7 +98,7 @@ function HomePage() {
 
       {/* Skills */}
       {skills.length > 0 && (
-        <section className="py-16 md:py-24 border-t border-black/[0.06] dark:border-white/[0.06]">
+        <section className="pinned-panel relative py-16 md:py-24 rounded-t-[32px] sm:rounded-t-[44px] bg-[#fafbfa] dark:bg-[#090b09] border-t border-black/[0.08] dark:border-white/[0.08] shadow-[0_-20px_50px_rgba(0,0,0,0.35)] dark:shadow-[0_-25px_60px_rgba(0,0,0,0.85)]">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <AnimatedSection>
               <div className="mb-10">
@@ -113,7 +116,7 @@ function HomePage() {
 
       {/* Certifications Preview */}
       {certifications && certifications.length > 0 && (
-        <section className="py-16 md:py-24 border-t border-black/[0.06] dark:border-white/[0.06]">
+        <section className="pinned-panel relative py-16 md:py-24 rounded-t-[32px] sm:rounded-t-[44px] bg-[#fafbfa] dark:bg-[#090b09] border-t border-black/[0.08] dark:border-white/[0.08] shadow-[0_-20px_50px_rgba(0,0,0,0.35)] dark:shadow-[0_-25px_60px_rgba(0,0,0,0.85)]">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <AnimatedSection>
               <div className="flex items-end justify-between mb-10">
@@ -169,6 +172,9 @@ function HomePage() {
           </div>
         </section>
       )}
-    </>
+
+      {/* Contact Section */}
+      <ContactSection profile={profile} />
+    </div>
   )
 }

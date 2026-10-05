@@ -2,6 +2,9 @@ import { useEffect } from 'react'
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 import { Navbar } from '@/components/layout/navbar'
 import { Footer } from '@/components/layout/footer'
+import { CustomCursor } from '@/components/layout/custom-cursor'
+import { ScrollSnake } from '@/components/layout/scroll-snake'
+import { AppleIntro } from '@/components/layout/apple-intro'
 import { prefetchPublicSiteData, getWarmPublicDataCache } from '@/lib/public-data-cache'
 import { getProfile } from '@/server/functions/profile'
 
@@ -29,6 +32,9 @@ function PublicLayout() {
 
   return (
     <div className="flex min-h-screen flex-col">
+      <AppleIntro />
+      <CustomCursor />
+      <ScrollSnake />
       <Navbar />
       <main className="flex-1">
         <Outlet />

@@ -38,7 +38,7 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        'sticky top-0 z-50 transition-all duration-300',
+        'sticky top-0 z-[60] transition-all duration-300',
         scrolled
           ? 'border-b border-black/[0.06] bg-[#fafbfa]/80 backdrop-blur-xl dark:border-white/[0.06] dark:bg-[#090b09]/80'
           : 'border-b border-transparent bg-transparent'
@@ -48,6 +48,11 @@ export function Navbar() {
         {/* Brand */}
         <Link
           to="/"
+          onClick={() => {
+            if (pathname === '/') {
+              window.dispatchEvent(new CustomEvent('replay-apple-intro'))
+            }
+          }}
           className="flex items-center gap-2.5 text-sm font-bold tracking-tight text-[#141714] dark:text-[#ecf0ea] hover:opacity-85 transition-opacity"
         >
           <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary-500 text-[11px] font-black text-[#090b09]">

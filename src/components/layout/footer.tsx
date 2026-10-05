@@ -12,7 +12,7 @@ interface FooterProps {
 
 export function Footer({ profile }: FooterProps) {
   return (
-    <footer className="border-t border-black/[0.06] dark:border-white/[0.06] py-10 bg-transparent text-slate-500 dark:text-white/50">
+    <footer className="relative z-[52] rounded-t-[32px] sm:rounded-t-[40px] bg-[#fafbfa] dark:bg-[#090b09] border-t border-black/[0.08] dark:border-white/[0.08] py-12 shadow-[0_-20px_50px_rgba(0,0,0,0.35)] dark:shadow-[0_-25px_60px_rgba(0,0,0,0.85)] text-slate-500 dark:text-white/50">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
         {/* Left: Brand / Copyright */}
         <div className="flex items-center gap-3 text-xs">
