@@ -30,7 +30,7 @@ function ProjectDetailPage() {
   const project = Route.useLoaderData()
 
   return (
-    <div className="py-24">
+    <div className="py-20 md:py-28 bg-dot-pattern min-h-screen">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         <AnimatedSection>
           <Link
@@ -117,9 +117,11 @@ function ProjectDetailPage() {
 
         {/* Description */}
         <AnimatedSection className="mt-12">
-          <div className="rounded-2xl border border-slate-200 bg-white p-8 dark:border-slate-800 dark:bg-slate-900">
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Overview</h2>
-            <div className="mt-4 space-y-4 text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-line">
+          <div className="glass-card rounded-2xl p-7 sm:p-8">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white pb-3 border-b border-slate-100 dark:border-slate-800">
+              Overview & Architecture
+            </h2>
+            <div className="mt-5 space-y-4 text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-line">
               {project.longDescription || project.shortDescription}
             </div>
           </div>
@@ -128,9 +130,11 @@ function ProjectDetailPage() {
         {/* How It Was Built */}
         {project.howItWasBuilt && (
           <AnimatedSection className="mt-8">
-            <div className="rounded-2xl border border-slate-200 bg-white p-8 dark:border-slate-800 dark:bg-slate-900">
-              <h2 className="text-2xl font-bold text-slate-900 dark:text-white">How It Was Built</h2>
-              <div className="mt-4 space-y-4 text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-line">
+            <div className="glass-card rounded-2xl p-7 sm:p-8">
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white pb-3 border-b border-slate-100 dark:border-slate-800">
+                How It Was Built & Tech Decisions
+              </h2>
+              <div className="mt-5 space-y-4 text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-line">
                 {project.howItWasBuilt}
               </div>
             </div>

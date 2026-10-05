@@ -1,4 +1,5 @@
 import { motion } from 'motion/react'
+import { Code2, Layers, Database, Cpu, Wrench, Terminal, Globe } from 'lucide-react'
 
 interface Skill {
   id: string
@@ -11,52 +12,87 @@ interface SkillsGridProps {
   skills: Skill[]
 }
 
-const proficiencyColors: Record<number, string> = {
-  1: 'bg-slate-300 dark:bg-slate-700',
-  2: 'bg-blue-400 dark:bg-blue-500',
-  3: 'bg-primary-500 dark:bg-primary-400',
-  4: 'bg-accent-500 dark:bg-accent-400',
-  5: 'bg-green-500 dark:bg-green-400',
+const categoryIcons: Record<string, typeof Code2> = {
+  'Language': Code2,
+  'Languages': Code2,
+  'Frontend': Layers,
+  'Backend': Cpu,
+  'Framework': Layers,
+  'Frameworks': Layers,
+  'Database & ORMs': Database,
+  'Databases': Database,
+  'Tools': Wrench,
+  'DevOps': Terminal,
+  'System': Terminal,
+  'General': Globe,
+}
+
+function getLevelLabel(proficiency: number): { label: string; badgeClass: string } {
+  if (proficiency >= 5) {
+    return {
+      label: 'Expert',
+      badgeClass: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300 border-emerald-500/20'
+    }
+  }
+  if (proficiency >= 4) {
+    return {
+      label: 'Advanced',
+      badgeClass: 'bg-primary-50 text-primary-700 dark:bg-primary-950/50 dark:text-primary-300 border-primary-500/20'
+    }
+  }
+  return {
+    label: 'Proficient',
+    badgeClass: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border-slate-200/50'
+  }
 }
 
 export function SkillsGrid({ skills }: SkillsGridProps) {
   const categories = [...new Set(skills.map((s) => s.category))]
 
   return (
-    <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-      {categories.map((category, catIdx) => (
-        <motion.div
-          key={category}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: catIdx * 0.1 }}
-          className="rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900"
-        >
-          <h3 className="mb-4 text-lg font-bold text-slate-900 dark:text-white">{category}</h3>
-          <div className="space-y-3">
-            {skills
-              .filter((s) => s.category === category)
-              .map((skill) => (
-                <div key={skill.id}>
-                  <div className="mb-1 flex items-center justify-between">
-                    <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{skill.name}</span>
-                    <span className="text-xs text-slate-500">{skill.proficiency}/5</span>
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {categories.map((category, catIdx) => {
+        const IconComponent = categoryIcons[category] || Code2
+        const categorySkills = skills.filter((s) => s.category === category)
+
+        return (
+          <motion.div
+            key={category}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: catIdx * 0.08 }}
+            className="glass-card rounded-2xl p-6"
+          >
+            <div className="flex items-center gap-3 mb-5 border-b border-slate-100 pb-4 dark:border-slate-800/80">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-100/70 text-primary-600 dark:bg-primary-950/60 dark:text-primary-400">
+                <IconComponent size={20} />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">{category}</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">{categorySkills.length} Technologies</p>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2.5">
+              {categorySkills.map((skill) => {
+                const { label, badgeClass } = getLevelLabel(skill.proficiency)
+                return (
+                  <div
+                    key={skill.id}
+                    className="group inline-flex items-center justify-between gap-2 rounded-xl border border-slate-200/70 bg-white/60 px-3.5 py-2 text-xs font-medium text-slate-800 shadow-sm transition-all hover:border-primary-400 hover:bg-white hover:shadow dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-200 dark:hover:border-primary-500/50 dark:hover:bg-slate-800/80"
+                  >
+                    <span className="font-semibold text-slate-900 dark:text-white">{skill.name}</span>
+                    <span className={`rounded-md border px-1.5 py-0.5 text-[10px] font-semibold ${badgeClass}`}>
+                      {label}
+                    </span>
                   </div>
-                  <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
-                    <motion.div
-                      className={`h-full rounded-full ${proficiencyColors[skill.proficiency] || proficiencyColors[3]}`}
-                      initial={{ width: 0 }}
-                      whileInView={{ width: `${skill.proficiency * 20}%` }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1, delay: 0.2, ease: 'easeOut' }}
-                    />
-                  </div>
-                </div>
-              ))}
-          </div>
-        </motion.div>
-      ))}
+                )
+              })}
+            </div>
+          </motion.div>
+        )
+      })}
     </div>
   )
 }

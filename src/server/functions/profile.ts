@@ -5,8 +5,13 @@ import { eq } from 'drizzle-orm'
 import { requireAdmin } from './auth-check'
 
 export const getProfile = createServerFn({ method: 'GET' }).handler(async () => {
-  const result = await db.select().from(profile).limit(1)
-  return result[0] || null
+  try {
+    const result = await db.select().from(profile).limit(1)
+    return result[0] || null
+  } catch (err) {
+    console.error('getProfile error:', err)
+    return null
+  }
 })
 
 export const updateProfile = createServerFn({ method: 'POST' })

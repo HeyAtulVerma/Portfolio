@@ -30,8 +30,10 @@ export function Footer({ profile }: FooterProps) {
               {[
                 { href: '/', label: 'Home' },
                 { href: '/projects', label: 'Projects' },
+                { href: '/certifications', label: 'Certifications' },
                 { href: '/about', label: 'About' },
                 { href: '/resume', label: 'Resume' },
+                { href: '/contact', label: 'Contact' },
               ].map((link) => (
                 <li key={link.href}>
                   <Link to={link.href} className="text-sm text-slate-500 transition-colors hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400">

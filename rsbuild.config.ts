@@ -5,4 +5,8 @@ import { tanstackStart } from '@tanstack/react-start/plugin/rsbuild';
 
 export default defineConfig({
   plugins: [pluginReact(), pluginTailwindcss(), tanstackStart()],
+  server: {
+    host: '127.0.0.1',
+    port: 3001,
+  },
 });

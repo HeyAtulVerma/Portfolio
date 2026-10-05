@@ -158,3 +158,22 @@ export const resumeContent = pgTable('resume_content', {
   sortOrder: integer('sort_order').notNull().default(0),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 })
+
+export const certifications = pgTable('certifications', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  title: text('title').notNull(),
+  issuer: text('issuer').notNull().default(''),
+  issueDate: text('issue_date').notNull().default(''),
+  expirationDate: text('expiration_date'),
+  credentialId: text('credential_id'),
+  credentialUrl: text('credential_url').notNull().default(''),
+  certificateUrl: text('certificate_url'),
+  certificatePublicId: text('certificate_public_id'),
+  skills: text('skills').array().notNull().default([]),
+  description: text('description').notNull().default(''),
+  sortOrder: integer('sort_order').notNull().default(0),
+  isPublished: boolean('is_published').notNull().default(true),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+})
+

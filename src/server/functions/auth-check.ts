@@ -5,8 +5,13 @@ import { auth } from '@/lib/auth'
 import { getRequest } from '@tanstack/react-start/server'
 
 export const checkUsersExist = createServerFn({ method: 'GET' }).handler(async () => {
-  const users = await db.select().from(user)
-  return users.length > 0
+  try {
+    const users = await db.select().from(user)
+    return users.length > 0
+  } catch (err) {
+    console.error('checkUsersExist error:', err)
+    return false
+  }
 })
 
 export const requireAdmin = createServerFn({ method: 'GET' }).handler(async () => {

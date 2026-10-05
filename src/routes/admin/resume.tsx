@@ -82,7 +82,7 @@ function AdminResume() {
       <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Manage your resume PDF and content sections</p>
 
       {/* PDF Upload */}
-      <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-8 dark:border-slate-800 dark:bg-slate-900">
+      <div className="mt-8 glass-card rounded-2xl p-7 sm:p-8">
         <h2 className="text-lg font-bold text-slate-900 dark:text-white">Resume PDF</h2>
         <div className="mt-4 flex flex-wrap items-center gap-4">
           {resumeUrl?.resumeUrl && (
@@ -112,7 +112,7 @@ function AdminResume() {
       </div>
 
       {/* Resume Content Sections */}
-      <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-8 dark:border-slate-800 dark:bg-slate-900">
+      <div className="mt-8 glass-card rounded-2xl p-7 sm:p-8">
         <h2 className="text-lg font-bold text-slate-900 dark:text-white">Resume Sections</h2>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">These appear on the formatted resume page</p>
 

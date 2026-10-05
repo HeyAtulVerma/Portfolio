@@ -36,21 +36,21 @@ export function ExperienceTimeline({ experiences }: ExperienceTimelineProps) {
               <div className="h-2 w-2 rounded-full bg-primary-500" />
             </div>
 
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 transition-shadow hover:shadow-lg dark:border-slate-800 dark:bg-slate-900">
-              <div className="flex items-start justify-between gap-4">
+            <div className="glass-card rounded-2xl p-6 transition-all hover:border-primary-500/30 hover:shadow-xl">
+              <div className="flex items-start justify-between gap-4 flex-wrap">
                 <div>
                   <h3 className="text-lg font-bold text-slate-900 dark:text-white">{exp.role}</h3>
-                  <div className="mt-1 flex items-center gap-2 text-sm text-primary-600 dark:text-primary-400">
+                  <div className="mt-1 flex items-center gap-2 text-sm text-primary-600 dark:text-primary-400 font-semibold">
                     <Briefcase size={14} />
-                    <span className="font-medium">{exp.company}</span>
+                    <span>{exp.company}</span>
                   </div>
                 </div>
-                <span className="shrink-0 rounded-full bg-primary-50 px-3 py-1 text-xs font-medium text-primary-700 dark:bg-primary-950/50 dark:text-primary-300">
+                <span className="shrink-0 rounded-full border border-primary-500/20 bg-primary-50 px-3 py-1 text-xs font-semibold text-primary-700 dark:border-primary-500/30 dark:bg-primary-950/50 dark:text-primary-300">
                   {exp.startDate} - {exp.isCurrentRole ? 'Present' : exp.endDate || ''}
                 </span>
               </div>
               {exp.description && (
-                <p className="mt-3 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                <p className="mt-3 text-sm text-slate-600 dark:text-slate-400 leading-relaxed whitespace-pre-line">
                   {exp.description}
                 </p>
               )}

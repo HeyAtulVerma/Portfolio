@@ -5,7 +5,12 @@ import { eq, asc } from 'drizzle-orm'
 import { requireAdmin } from './auth-check'
 
 export const getProjects = createServerFn({ method: 'GET' }).handler(async () => {
-  return await db.select().from(projects).where(eq(projects.isPublished, true)).orderBy(asc(projects.sortOrder))
+  try {
+    return await db.select().from(projects).where(eq(projects.isPublished, true)).orderBy(asc(projects.sortOrder))
+  } catch (err) {
+    console.error('getProjects error:', err)
+    return []
+  }
 })
 
 export const getAllProjects = createServerFn({ method: 'GET' }).handler(async () => {

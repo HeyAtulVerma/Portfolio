@@ -31,24 +31,29 @@ function AboutPage() {
   const { profile, skills, experiences } = Route.useLoaderData()
 
   return (
-    <div className="py-24">
+    <div className="py-20 md:py-28 bg-dot-pattern min-h-screen">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <AnimatedSection>
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white sm:text-5xl">
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary-500/20 bg-primary-50/50 px-3.5 py-1 text-xs font-semibold text-primary-600 dark:border-primary-500/30 dark:bg-primary-950/40 dark:text-primary-400 mb-4">
+            Developer Journey
+          </div>
+          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
             About Me
           </h1>
-          <p className="mt-4 text-lg text-slate-500 dark:text-slate-400">
-            Get to know me better
+          <p className="mt-3 text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl">
+            Background, engineering approach, and the story behind my work.
           </p>
         </AnimatedSection>
 
         {/* Bio Section */}
-        <div className="mt-16 grid gap-12 lg:grid-cols-3">
+        <div className="mt-14 grid gap-8 lg:grid-cols-3">
           <AnimatedSection className="lg:col-span-2">
-            <div className="rounded-2xl border border-slate-200 bg-white p-8 dark:border-slate-800 dark:bg-slate-900">
-              <h2 className="text-2xl font-bold text-slate-900 dark:text-white">My Story</h2>
-              <div className="mt-4 space-y-4 text-slate-600 dark:text-slate-300 leading-relaxed">
+            <div className="glass-card rounded-2xl p-7 sm:p-8">
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white pb-3 border-b border-slate-100 dark:border-slate-800">
+                My Story & Background
+              </h2>
+              <div className="mt-5 space-y-4 text-slate-600 dark:text-slate-300 leading-relaxed">
                 {profile?.longBio ? (
                   profile.longBio.split('\n').map((p, i) => (
                     <p key={i}>{p}</p>
@@ -61,8 +66,10 @@ function AboutPage() {
           </AnimatedSection>
 
           <AnimatedSection delay={0.2}>
-            <div className="rounded-2xl border border-slate-200 bg-white p-8 dark:border-slate-800 dark:bg-slate-900">
-              <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Quick Info</h2>
+            <div className="glass-card rounded-2xl p-7 sm:p-8">
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white pb-3 border-b border-slate-100 dark:border-slate-800">
+                Quick Facts
+              </h2>
               <div className="mt-4 space-y-4">
                 {profile?.fullName && (
                   <div className="flex items-center gap-3 text-slate-600 dark:text-slate-300">

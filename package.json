@@ -6,10 +6,10 @@
     "#/*": "./src/*"
   },
   "scripts": {
-    "dev": "rsbuild",
-    "build": "rsbuild build",
-    "preview": "rsbuild preview",
-    "start": "srvx --prod -s ../client dist/server/index.js"
+    "dev": "rsbuild --port 3001",
+    "build": "rsbuild build && (cp -r dist/server/static dist/client/ 2>/dev/null || true)",
+    "preview": "rsbuild preview --port 3001",
+    "start": "srvx --prod -p 3001 -s ../client dist/server/index.js"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4",

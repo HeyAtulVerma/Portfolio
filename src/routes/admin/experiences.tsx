@@ -58,7 +58,7 @@ function AdminExperiences() {
       </div>
 
       {showForm && (
-        <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-8 dark:border-slate-800 dark:bg-slate-900">
+        <div className="mt-8 glass-card rounded-2xl p-7 sm:p-8">
           <h2 className="text-lg font-bold text-slate-900 dark:text-white">New Experience</h2>
           <div className="mt-4 space-y-4">
             <div className="grid gap-4 lg:grid-cols-2">
@@ -88,12 +88,12 @@ function AdminExperiences() {
 
       <div className="mt-8 space-y-4">
         {experiences.length === 0 ? (
-          <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center dark:border-slate-800 dark:bg-slate-900">
+          <div className="glass-card rounded-2xl p-12 text-center">
             <p className="text-slate-500 dark:text-slate-400">No experiences added yet.</p>
           </div>
         ) : (
           experiences.map((exp) => (
-            <div key={exp.id} className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+            <div key={exp.id} className="glass-card rounded-2xl p-5 flex items-center justify-between">
               <div>
                 <h3 className="font-bold text-slate-900 dark:text-white">{exp.role}</h3>
                 <p className="text-sm text-primary-600 dark:text-primary-400">{exp.company}</p>

@@ -1,7 +1,7 @@
 import { createServerFn } from '@tanstack/react-start'
 import { db } from '@/db'
-import { profile, skills, experiences, projects, projectImages, resumeContent } from '@/db/schema'
-import { eq, asc, inArray } from 'drizzle-orm'
+import { profile, skills, experiences, projects, projectImages, resumeContent, certifications } from '@/db/schema'
+import { eq, asc, desc, inArray } from 'drizzle-orm'
 import { getEnv } from '@/lib/env'
 
 async function getResumePdfDataHelper() {
@@ -40,42 +40,58 @@ async function getResumePdfDataHelper() {
 }
 
 export const getPublicSiteData = createServerFn({ method: 'GET' }).handler(async () => {
-  const [
-    profileData,
-    skillsData,
-    experiencesData,
-    projectsData,
-    resumeContentData,
-    resumePdfData
-  ] = await Promise.all([
-    db.select().from(profile).limit(1).then(res => res[0] || null),
-    db.select().from(skills).orderBy(asc(skills.sortOrder)),
-    db.select().from(experiences).orderBy(asc(experiences.sortOrder)),
-    db.select().from(projects).where(eq(projects.isPublished, true)).orderBy(asc(projects.sortOrder)),
-    db.select().from(resumeContent).orderBy(asc(resumeContent.sortOrder)),
-    getResumePdfDataHelper()
-  ])
+  try {
+    const [
+      profileData,
+      skillsData,
+      experiencesData,
+      projectsData,
+      certificationsData,
+      resumeContentData,
+      resumePdfData
+    ] = await Promise.all([
+      db.select().from(profile).limit(1).then(res => res[0] || null),
+      db.select().from(skills).orderBy(asc(skills.sortOrder)),
+      db.select().from(experiences).orderBy(asc(experiences.sortOrder)),
+      db.select().from(projects).where(eq(projects.isPublished, true)).orderBy(asc(projects.sortOrder)),
+      db.select().from(certifications).where(eq(certifications.isPublished, true)).orderBy(asc(certifications.sortOrder), desc(certifications.createdAt)),
+      db.select().from(resumeContent).orderBy(asc(resumeContent.sortOrder)),
+      getResumePdfDataHelper()
+    ])
 
-  // Fetch related images for all published projects in parallel
-  const images = projectsData.length > 0
-    ? await db
-        .select()
-        .from(projectImages)
-        .where(inArray(projectImages.projectId, projectsData.map(p => p.id)))
-        .orderBy(asc(projectImages.sortOrder))
-    : []
+    // Fetch related images for all published projects in parallel
+    const images = projectsData.length > 0
+      ? await db
+          .select()
+          .from(projectImages)
+          .where(inArray(projectImages.projectId, projectsData.map(p => p.id)))
+          .orderBy(asc(projectImages.sortOrder))
+      : []
 
-  const projectsWithImages = projectsData.map(p => ({
-    ...p,
-    images: images.filter(img => img.projectId === p.id)
-  }))
+    const projectsWithImages = projectsData.map(p => ({
+      ...p,
+      images: images.filter(img => img.projectId === p.id)
+    }))
 
-  return {
-    profile: profileData,
-    skills: skillsData,
-    experiences: experiencesData,
-    projects: projectsWithImages,
-    resumeContent: resumeContentData,
-    resumePdf: resumePdfData
+    return {
+      profile: profileData,
+      skills: skillsData,
+      experiences: experiencesData,
+      projects: projectsWithImages,
+      certifications: certificationsData,
+      resumeContent: resumeContentData,
+      resumePdf: resumePdfData
+    }
+  } catch (error) {
+    console.error('getPublicSiteData error:', error)
+    return {
+      profile: null,
+      skills: [],
+      experiences: [],
+      projects: [],
+      certifications: [],
+      resumeContent: [],
+      resumePdf: null
+    }
   }
 })

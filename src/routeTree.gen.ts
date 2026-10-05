@@ -20,13 +20,17 @@ import { Route as AdminResumeRouteImport } from './routes/admin/resume'
 import { Route as AdminProfileRouteImport } from './routes/admin/profile'
 import { Route as AdminExperiencesRouteImport } from './routes/admin/experiences'
 import { Route as PublicContactRouteImport } from './routes/_public/contact'
+import { Route as PublicCertificationsRouteImport } from './routes/_public/certifications'
 import { Route as PublicAboutRouteImport } from './routes/_public/about'
 import { Route as AdminProjectsIndexRouteImport } from './routes/admin/projects/index'
+import { Route as AdminCertificationsIndexRouteImport } from './routes/admin/certifications/index'
 import { Route as PublicResumeIndexRouteImport } from './routes/_public/resume/index'
 import { Route as PublicProjectsIndexRouteImport } from './routes/_public/projects/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AdminProjectsNewRouteImport } from './routes/admin/projects/new'
 import { Route as AdminProjectsIdRouteImport } from './routes/admin/projects/$id'
+import { Route as AdminCertificationsNewRouteImport } from './routes/admin/certifications/new'
+import { Route as AdminCertificationsIdRouteImport } from './routes/admin/certifications/$id'
 import { Route as PublicResumePdfRouteImport } from './routes/_public/resume/pdf'
 import { Route as PublicProjectsSlugRouteImport } from './routes/_public/projects/$slug'
 
@@ -84,6 +88,11 @@ const PublicContactRoute = PublicContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => PublicRoute,
 } as any)
+const PublicCertificationsRoute = PublicCertificationsRouteImport.update({
+  id: '/certifications',
+  path: '/certifications',
+  getParentRoute: () => PublicRoute,
+} as any)
 const PublicAboutRoute = PublicAboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -94,6 +103,12 @@ const AdminProjectsIndexRoute = AdminProjectsIndexRouteImport.update({
   path: '/projects/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminCertificationsIndexRoute =
+  AdminCertificationsIndexRouteImport.update({
+    id: '/certifications/',
+    path: '/certifications/',
+    getParentRoute: () => AdminRoute,
+  } as any)
 const PublicResumeIndexRoute = PublicResumeIndexRouteImport.update({
   id: '/resume/',
   path: '/resume/',
@@ -119,6 +134,16 @@ const AdminProjectsIdRoute = AdminProjectsIdRouteImport.update({
   path: '/projects/$id',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminCertificationsNewRoute = AdminCertificationsNewRouteImport.update({
+  id: '/certifications/new',
+  path: '/certifications/new',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCertificationsIdRoute = AdminCertificationsIdRouteImport.update({
+  id: '/certifications/$id',
+  path: '/certifications/$id',
+  getParentRoute: () => AdminRoute,
+} as any)
 const PublicResumePdfRoute = PublicResumePdfRouteImport.update({
   id: '/resume/pdf',
   path: '/resume/pdf',
@@ -136,6 +161,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
   '/about': typeof PublicAboutRoute
+  '/certifications': typeof PublicCertificationsRoute
   '/contact': typeof PublicContactRoute
   '/admin/experiences': typeof AdminExperiencesRoute
   '/admin/profile': typeof AdminProfileRoute
@@ -144,17 +170,21 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/projects/$slug': typeof PublicProjectsSlugRoute
   '/resume/pdf': typeof PublicResumePdfRoute
+  '/admin/certifications/$id': typeof AdminCertificationsIdRoute
+  '/admin/certifications/new': typeof AdminCertificationsNewRoute
   '/admin/projects/$id': typeof AdminProjectsIdRoute
   '/admin/projects/new': typeof AdminProjectsNewRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/projects/': typeof PublicProjectsIndexRoute
   '/resume/': typeof PublicResumeIndexRoute
+  '/admin/certifications/': typeof AdminCertificationsIndexRoute
   '/admin/projects/': typeof AdminProjectsIndexRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
   '/about': typeof PublicAboutRoute
+  '/certifications': typeof PublicCertificationsRoute
   '/contact': typeof PublicContactRoute
   '/admin/experiences': typeof AdminExperiencesRoute
   '/admin/profile': typeof AdminProfileRoute
@@ -164,11 +194,14 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/projects/$slug': typeof PublicProjectsSlugRoute
   '/resume/pdf': typeof PublicResumePdfRoute
+  '/admin/certifications/$id': typeof AdminCertificationsIdRoute
+  '/admin/certifications/new': typeof AdminCertificationsNewRoute
   '/admin/projects/$id': typeof AdminProjectsIdRoute
   '/admin/projects/new': typeof AdminProjectsNewRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/projects': typeof PublicProjectsIndexRoute
   '/resume': typeof PublicResumeIndexRoute
+  '/admin/certifications': typeof AdminCertificationsIndexRoute
   '/admin/projects': typeof AdminProjectsIndexRoute
 }
 export interface FileRoutesById {
@@ -178,6 +211,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
   '/_public/about': typeof PublicAboutRoute
+  '/_public/certifications': typeof PublicCertificationsRoute
   '/_public/contact': typeof PublicContactRoute
   '/admin/experiences': typeof AdminExperiencesRoute
   '/admin/profile': typeof AdminProfileRoute
@@ -187,11 +221,14 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/_public/projects/$slug': typeof PublicProjectsSlugRoute
   '/_public/resume/pdf': typeof PublicResumePdfRoute
+  '/admin/certifications/$id': typeof AdminCertificationsIdRoute
+  '/admin/certifications/new': typeof AdminCertificationsNewRoute
   '/admin/projects/$id': typeof AdminProjectsIdRoute
   '/admin/projects/new': typeof AdminProjectsNewRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_public/projects/': typeof PublicProjectsIndexRoute
   '/_public/resume/': typeof PublicResumeIndexRoute
+  '/admin/certifications/': typeof AdminCertificationsIndexRoute
   '/admin/projects/': typeof AdminProjectsIndexRoute
 }
 export interface FileRouteTypes {
@@ -202,6 +239,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/setup'
     | '/about'
+    | '/certifications'
     | '/contact'
     | '/admin/experiences'
     | '/admin/profile'
@@ -210,17 +248,21 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/projects/$slug'
     | '/resume/pdf'
+    | '/admin/certifications/$id'
+    | '/admin/certifications/new'
     | '/admin/projects/$id'
     | '/admin/projects/new'
     | '/api/auth/$'
     | '/projects/'
     | '/resume/'
+    | '/admin/certifications/'
     | '/admin/projects/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
     | '/setup'
     | '/about'
+    | '/certifications'
     | '/contact'
     | '/admin/experiences'
     | '/admin/profile'
@@ -230,11 +272,14 @@ export interface FileRouteTypes {
     | '/admin'
     | '/projects/$slug'
     | '/resume/pdf'
+    | '/admin/certifications/$id'
+    | '/admin/certifications/new'
     | '/admin/projects/$id'
     | '/admin/projects/new'
     | '/api/auth/$'
     | '/projects'
     | '/resume'
+    | '/admin/certifications'
     | '/admin/projects'
   id:
     | '__root__'
@@ -243,6 +288,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/setup'
     | '/_public/about'
+    | '/_public/certifications'
     | '/_public/contact'
     | '/admin/experiences'
     | '/admin/profile'
@@ -252,11 +298,14 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/_public/projects/$slug'
     | '/_public/resume/pdf'
+    | '/admin/certifications/$id'
+    | '/admin/certifications/new'
     | '/admin/projects/$id'
     | '/admin/projects/new'
     | '/api/auth/$'
     | '/_public/projects/'
     | '/_public/resume/'
+    | '/admin/certifications/'
     | '/admin/projects/'
   fileRoutesById: FileRoutesById
 }
@@ -347,6 +396,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicContactRouteImport
       parentRoute: typeof PublicRoute
     }
+    '/_public/certifications': {
+      id: '/_public/certifications'
+      path: '/certifications'
+      fullPath: '/certifications'
+      preLoaderRoute: typeof PublicCertificationsRouteImport
+      parentRoute: typeof PublicRoute
+    }
     '/_public/about': {
       id: '/_public/about'
       path: '/about'
@@ -359,6 +415,13 @@ declare module '@tanstack/react-router' {
       path: '/projects'
       fullPath: '/admin/projects/'
       preLoaderRoute: typeof AdminProjectsIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/certifications/': {
+      id: '/admin/certifications/'
+      path: '/certifications'
+      fullPath: '/admin/certifications/'
+      preLoaderRoute: typeof AdminCertificationsIndexRouteImport
       parentRoute: typeof AdminRoute
     }
     '/_public/resume/': {
@@ -396,6 +459,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProjectsIdRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/certifications/new': {
+      id: '/admin/certifications/new'
+      path: '/certifications/new'
+      fullPath: '/admin/certifications/new'
+      preLoaderRoute: typeof AdminCertificationsNewRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/certifications/$id': {
+      id: '/admin/certifications/$id'
+      path: '/certifications/$id'
+      fullPath: '/admin/certifications/$id'
+      preLoaderRoute: typeof AdminCertificationsIdRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/_public/resume/pdf': {
       id: '/_public/resume/pdf'
       path: '/resume/pdf'
@@ -415,6 +492,7 @@ declare module '@tanstack/react-router' {
 
 interface PublicRouteChildren {
   PublicAboutRoute: typeof PublicAboutRoute
+  PublicCertificationsRoute: typeof PublicCertificationsRoute
   PublicContactRoute: typeof PublicContactRoute
   PublicIndexRoute: typeof PublicIndexRoute
   PublicProjectsSlugRoute: typeof PublicProjectsSlugRoute
@@ -425,6 +503,7 @@ interface PublicRouteChildren {
 
 const PublicRouteChildren: PublicRouteChildren = {
   PublicAboutRoute: PublicAboutRoute,
+  PublicCertificationsRoute: PublicCertificationsRoute,
   PublicContactRoute: PublicContactRoute,
   PublicIndexRoute: PublicIndexRoute,
   PublicProjectsSlugRoute: PublicProjectsSlugRoute,
@@ -442,8 +521,11 @@ interface AdminRouteChildren {
   AdminResumeRoute: typeof AdminResumeRoute
   AdminSkillsRoute: typeof AdminSkillsRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminCertificationsIdRoute: typeof AdminCertificationsIdRoute
+  AdminCertificationsNewRoute: typeof AdminCertificationsNewRoute
   AdminProjectsIdRoute: typeof AdminProjectsIdRoute
   AdminProjectsNewRoute: typeof AdminProjectsNewRoute
+  AdminCertificationsIndexRoute: typeof AdminCertificationsIndexRoute
   AdminProjectsIndexRoute: typeof AdminProjectsIndexRoute
 }
 
@@ -453,8 +535,11 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminResumeRoute: AdminResumeRoute,
   AdminSkillsRoute: AdminSkillsRoute,
   AdminIndexRoute: AdminIndexRoute,
+  AdminCertificationsIdRoute: AdminCertificationsIdRoute,
+  AdminCertificationsNewRoute: AdminCertificationsNewRoute,
   AdminProjectsIdRoute: AdminProjectsIdRoute,
   AdminProjectsNewRoute: AdminProjectsNewRoute,
+  AdminCertificationsIndexRoute: AdminCertificationsIndexRoute,
   AdminProjectsIndexRoute: AdminProjectsIndexRoute,
 }
 

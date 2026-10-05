@@ -162,6 +162,27 @@ async function migrate() {
   `
   console.log('  Created resume_content table')
 
+  await sql`
+    CREATE TABLE IF NOT EXISTS "certifications" (
+      "id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+      "title" text NOT NULL,
+      "issuer" text NOT NULL DEFAULT '',
+      "issue_date" text NOT NULL DEFAULT '',
+      "expiration_date" text,
+      "credential_id" text,
+      "credential_url" text NOT NULL DEFAULT '',
+      "certificate_url" text,
+      "certificate_public_id" text,
+      "skills" text[] NOT NULL DEFAULT '{}',
+      "description" text NOT NULL DEFAULT '',
+      "sort_order" integer NOT NULL DEFAULT 0,
+      "is_published" boolean NOT NULL DEFAULT true,
+      "created_at" timestamp NOT NULL DEFAULT now(),
+      "updated_at" timestamp NOT NULL DEFAULT now()
+    )
+  `
+  console.log('  Created certifications table')
+
   console.log('All migrations completed successfully!')
 }
 

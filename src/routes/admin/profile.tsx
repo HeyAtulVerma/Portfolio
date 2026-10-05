@@ -46,7 +46,7 @@ function AdminProfile() {
       <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Profile</h1>
       <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Update your personal information</p>
 
-      <form onSubmit={handleSubmit} className="mt-8 rounded-2xl border border-slate-200 bg-white p-8 dark:border-slate-800 dark:bg-slate-900">
+      <form onSubmit={handleSubmit} className="mt-8 glass-card rounded-2xl p-7 sm:p-8">
         <div className="space-y-6">
           <div className="grid gap-6 lg:grid-cols-2">
             <div>

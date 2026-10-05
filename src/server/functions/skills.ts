@@ -5,7 +5,12 @@ import { eq, asc } from 'drizzle-orm'
 import { requireAdmin } from './auth-check'
 
 export const getSkills = createServerFn({ method: 'GET' }).handler(async () => {
-  return await db.select().from(skills).orderBy(asc(skills.sortOrder))
+  try {
+    return await db.select().from(skills).orderBy(asc(skills.sortOrder))
+  } catch (err) {
+    console.error('getSkills error:', err)
+    return []
+  }
 })
 
 export const createSkill = createServerFn({ method: 'POST' })
